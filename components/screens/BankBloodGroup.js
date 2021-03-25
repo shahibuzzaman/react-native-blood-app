@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,6 +9,7 @@ import {
   Dimensions,
 } from 'react-native';
 const {width, height} = Dimensions.get('window');
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const BankBloodGroup = ({navigation, route}) => {
   const categories = [
@@ -54,12 +55,96 @@ const BankBloodGroup = ({navigation, route}) => {
     },
   ];
 
-  const {bank_id} = route.params;
+  const {bank_id, banks} = route.params;
+
+  useEffect(() => {}, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.bankContainer}>
-        <Text>Hello</Text>
+        <Text
+          style={{
+            fontSize: 24,
+            color: 'white',
+            textAlign: 'center',
+          }}
+          numberOfLines={2}>
+          {banks.bankname}
+        </Text>
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            marginLeft: width / 4,
+          }}>
+          <Icon
+            name="map-marker"
+            color="white"
+            size={20}
+            style={{marginTop: 10}}
+          />
+          <Text
+            style={{
+              fontSize: 16,
+              color: 'white',
+              textAlign: 'center',
+              marginTop: 10,
+              marginLeft: 5,
+            }}
+            numberOfLines={2}>
+            {banks.address}
+          </Text>
+        </View>
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            marginLeft: width / 4,
+          }}>
+          <Icon name="phone" color="white" size={20} style={{marginTop: 10}} />
+          <Text
+            style={{
+              fontSize: 16,
+              color: 'white',
+              textAlign: 'center',
+              marginTop: 10,
+              marginLeft: 5,
+            }}
+            numberOfLines={2}>
+            {banks.contact}
+          </Text>
+        </View>
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            marginLeft: width / 4,
+          }}>
+          <Icon name="email" color="white" size={20} style={{marginTop: 10}} />
+          <Text
+            style={{
+              fontSize: 16,
+              color: 'white',
+              textAlign: 'center',
+              marginTop: 10,
+              marginLeft: 5,
+            }}
+            numberOfLines={2}>
+            {banks.email}
+          </Text>
+        </View>
+        <Text
+          style={{
+            fontSize: 18,
+            color: 'white',
+            marginTop: 30,
+            marginLeft: 5,
+            textAlign: 'center',
+          }}
+          numberOfLines={3}>
+          Total 2000 Active Donor in This Bank. Select Blood Group to Find
+          Specific Donor.
+        </Text>
       </View>
       <View style={styles.bloodGroupContainer}>
         <FlatList
@@ -113,6 +198,7 @@ const styles = StyleSheet.create({
   bankContainer: {
     flex: 1,
     backgroundColor: '#d1001c',
+    justifyContent: 'center',
   },
   bloodGroupContainer: {
     flex: 1,

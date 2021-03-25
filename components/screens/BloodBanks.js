@@ -88,6 +88,7 @@ const BloodBanks = ({navigation, route}) => {
               onPress={() => {
                 navigation.navigate('Banks Blood', {
                   bank_id: item.id,
+                  banks: item,
                 });
               }}>
               <Text style={styles.text} numberOfLines={2}>

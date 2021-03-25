@@ -27,7 +27,7 @@ const DonorDetails = ({navigation, user, logout}) => {
       .then((json) => setDonorDetails(json));
   }, [user]);
 
-  console.log('bankd', getDonorDetails.Donar);
+  console.log('bankd', getDonorDetails.Donar.Bank);
 
   return (
     <View style={{flex: 1}}>
@@ -36,7 +36,7 @@ const DonorDetails = ({navigation, user, logout}) => {
           <View style={{flex: 0.1, backgroundColor: 'white'}}></View>
           <View
             style={{
-              flex: 0.4,
+              flex: 0.3,
               backgroundColor: 'white',
 
               alignItems: 'center',
@@ -54,26 +54,51 @@ const DonorDetails = ({navigation, user, logout}) => {
                 {getDonorDetails.Donar.Details[0].blood.toUpperCase()}
               </Text>
             </View>
+          </View>
+          <View style={{flex: 0.5, margin: 20}}>
             <Text style={{marginTop: 10, fontSize: 16}}>
+              <Text style={{fontWeight: 'bold', margin: 10}}>Name: </Text>
               {getDonorDetails.Donar.Details[0].name}
             </Text>
             <Text style={{marginTop: 10, fontSize: 16}}>
-              {getDonorDetails.Donar.Details[0].email}{' '}
+              <Text style={{fontWeight: 'bold', margin: 10}}>Email: </Text>
+              {getDonorDetails.Donar.Details[0].email}
             </Text>
             <Text style={{marginTop: 10, fontSize: 16}}>
-              {getDonorDetails.Donar.Details[0].address}{' '}
+              <Text style={{fontWeight: 'bold', margin: 10}}>Address: </Text>
+              {getDonorDetails.Donar.Details[0].address}
+            </Text>
+            <Text style={{marginTop: 10, fontSize: 16}}>
+              <Text style={{fontWeight: 'bold', margin: 10}}>Phone: </Text>
+              {getDonorDetails.Donar.Details[0].phone}
+            </Text>
+            {/* <Text style={{marginTop: 10, fontSize: 16}}>
+              <Text style={{fontWeight: 'bold', margin: 10}}>Member at: </Text>
+              {getDonorDetails.Donar.Details[0].name}
+            </Text> */}
+            <Text style={{marginTop: 10, fontSize: 16}}>
+              <Text style={{fontWeight: 'bold', margin: 10}}>
+                Last date of blood donation:{' '}
+              </Text>
+              {getDonorDetails.Donar.Details[0].date ? date : 'Not set yet!'}
             </Text>
           </View>
-          <View style={{flex: 0.5}}>
-            <TouchableOpacity style={{flex: 1, flexDirection: 'row'}}>
-              <View>
-                <Text>abcd</Text>
-              </View>
-            </TouchableOpacity>
+          <View
+            style={{flex: 0.1, justifyContent: 'center', alignItems: 'center'}}>
+            <Button title="Logout" onPress={() => logout()} />
           </View>
-          <Button title="Logout" onPress={() => logout()} />
         </View>
-      ) : null}
+      ) : (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'white',
+          }}>
+          <ActivityIndicator size="large" color="#d1001c" />
+        </View>
+      )}
     </View>
   );
 };
