@@ -112,19 +112,17 @@ const BloodBank = ({navigation}) => {
   );
 
   const nameInputChange = (value) => {
-    if (value.trim().length >= 4) {
+    if (value) {
       setData({
         ...data,
         name: value,
         check_textInputChange: true,
-        isValidUser: true,
       });
     } else {
       setData({
         ...data,
         name: '',
         check_textInputChange: false,
-        isValidUser: false,
       });
     }
   };
@@ -496,11 +494,11 @@ const BloodBank = ({navigation}) => {
             </View>
             <View style={{flex: 1, flexDirection: 'column', marginLeft: 20}}>
               <View style={{flex: 1}}>
-                <Text style={styles.text_footer}>Upazila</Text>
+                <Text style={styles.text_footer}>Thana</Text>
                 <View style={styles.action}>
                   <Feather name="map-pin" color="#05375a" size={20} />
                   <TextInput
-                    placeholder="Your Zone"
+                    placeholder="Your Thana"
                     style={styles.textInput}
                     autoCapitalize="none"
                     onFocus={() => setDisplayZone(!displayZone)}

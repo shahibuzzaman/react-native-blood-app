@@ -69,7 +69,7 @@ const Profile = ({navigation, getLoginValue, logout}) => {
         <Button title="Show details" onPress={() => userDetails()} />
         <Button title="Logout" onPress={() => logout()} />
         <ProfileDetails details={details} /> */}
-        <DonorDetails user={user} logout={logout} />
+        <DonorDetails user={user} logout={logout} navigation={navigation} />
       </View>
     );
   } else if (user.bank === '1') {

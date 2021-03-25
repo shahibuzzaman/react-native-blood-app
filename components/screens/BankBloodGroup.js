@@ -133,7 +133,7 @@ const BankBloodGroup = ({navigation, route}) => {
             {banks.email}
           </Text>
         </View>
-        <Text
+        {/* <Text
           style={{
             fontSize: 18,
             color: 'white',
@@ -144,7 +144,7 @@ const BankBloodGroup = ({navigation, route}) => {
           numberOfLines={3}>
           Total 2000 Active Donor in This Bank. Select Blood Group to Find
           Specific Donor.
-        </Text>
+        </Text> */}
       </View>
       <View style={styles.bloodGroupContainer}>
         <FlatList

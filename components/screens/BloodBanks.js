@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 const {width, height} = Dimensions.get('window');
 
@@ -51,56 +52,84 @@ const BloodBanks = ({navigation, route}) => {
   const [donor, setDonor] = useState('');
 
   useEffect(() => {
-    fetch(`http://bloodbank.clonestudiobd.com/api/zonebank/${searchZone}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
-      response.json().then((result) => {
-        setDonor(result);
-        console.log(result);
+    if (searchZone) {
+      fetch(`http://bloodbank.clonestudiobd.com/api/zonebank/${searchZone}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then((response) => {
+        response.json().then((result) => {
+          setDonor(result);
+          console.log(result);
+        });
       });
-    });
+    } else {
+      fetch(`http://bloodbank.clonestudiobd.com/api/bank/all`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then((response) => {
+        response.json().then((result) => {
+          setDonor(result);
+          console.log(result);
+        });
+      });
+    }
   }, [searchZone]);
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={donor}
-        showsVerticalScrollIndicator={false}
-        numColumns={2}
-        keyExtractor={(item) => String(item.id)}
-        renderItem={({item}) => (
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 20,
-            }}>
-            {/* <Button
+      {donor ? (
+        <View>
+          <FlatList
+            data={donor}
+            showsVerticalScrollIndicator={false}
+            numColumns={2}
+            keyExtractor={(item) => String(item.id)}
+            renderItem={({item}) => (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: 20,
+                }}>
+                {/* <Button
               title={item.title}
               onPress={() => navigation.navigate(`${item.title}`)}
             /> */}
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => {
-                navigation.navigate('Banks Blood', {
-                  bank_id: item.id,
-                  banks: item,
-                });
-              }}>
-              <Text style={styles.text} numberOfLines={2}>
-                {item.bankname}
-              </Text>
-              <Text style={styles.text} numberOfLines={2}>
-                Address
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      />
+                <TouchableOpacity
+                  style={styles.item}
+                  onPress={() => {
+                    navigation.navigate('Banks Blood', {
+                      bank_id: item.id,
+                      banks: item,
+                    });
+                  }}>
+                  <Text style={styles.text} numberOfLines={2}>
+                    {item.bankname}
+                  </Text>
+                  <Text style={styles.text} numberOfLines={2}>
+                    Address
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+        </View>
+      ) : (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'white',
+          }}>
+          <ActivityIndicator size="large" color="#d1001c" />
+        </View>
+      )}
     </View>
   );
 };

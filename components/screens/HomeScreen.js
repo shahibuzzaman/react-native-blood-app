@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Image,
   ImageBackground,
+  ScrollView,
 } from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import FindBank from './FindBank';
@@ -58,7 +59,7 @@ const {width, height} = Dimensions.get('window');
 
 const HomeScreen = ({navigation}) => {
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
+    <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
       <View
         style={{
           flex: 1,
@@ -134,7 +135,7 @@ const HomeScreen = ({navigation}) => {
         }}>
         <FindBank navigation={navigation} />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

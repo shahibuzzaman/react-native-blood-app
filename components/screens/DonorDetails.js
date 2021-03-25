@@ -27,13 +27,27 @@ const DonorDetails = ({navigation, user, logout}) => {
       .then((json) => setDonorDetails(json));
   }, [user]);
 
-  console.log('bankd', getDonorDetails.Donar.Bank);
-
   return (
     <View style={{flex: 1}}>
       {getDonorDetails.Donar ? (
         <View style={{flex: 1}}>
-          <View style={{flex: 0.1, backgroundColor: 'white'}}></View>
+          <View
+            style={{
+              flex: 0.1,
+              justifyContent: 'center',
+              alignItems: 'flex-end',
+              marginRight: 20,
+            }}>
+            <Button
+              title="Edit"
+              color="#d1001c"
+              onPress={() => {
+                navigation.navigate('Donor Edit', {
+                  user_id: getDonorDetails.Donar.Details[0].id,
+                });
+              }}
+            />
+          </View>
           <View
             style={{
               flex: 0.3,
@@ -80,12 +94,14 @@ const DonorDetails = ({navigation, user, logout}) => {
               <Text style={{fontWeight: 'bold', margin: 10}}>
                 Last date of blood donation:{' '}
               </Text>
-              {getDonorDetails.Donar.Details[0].date ? date : 'Not set yet!'}
+              {getDonorDetails.Donar.Details[0].date
+                ? getDonorDetails.Donar.Details[0].date
+                : 'Not set yet!'}
             </Text>
           </View>
           <View
             style={{flex: 0.1, justifyContent: 'center', alignItems: 'center'}}>
-            <Button title="Logout" onPress={() => logout()} />
+            <Button title="Logout" color="#3F51B5" onPress={() => logout()} />
           </View>
         </View>
       ) : (

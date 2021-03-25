@@ -34,6 +34,8 @@ import DonorDetails from './components/screens/DonorDetails';
 import BankDetails from './components/screens/BankDetails';
 import BankBloodGroup from './components/screens/BankBloodGroup';
 import BloodBanks from './components/screens/BloodBanks';
+import DonorDetailsEdit from './components/screens/DonorDetailsEdit';
+import Icon from 'react-native-vector-icons/Fontisto';
 
 const LogoTitle = () => {
   return (
@@ -43,13 +45,16 @@ const LogoTitle = () => {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-      <Image
+      <Icon name="blood-drop" size={30} color="#d1001c" />
+      <Text
         style={{
-          height: 50,
-          width: 200,
-        }}
-        source={require('./components/assets/logo.png')}
-      />
+          fontSize: 30,
+          fontWeight: 'bold',
+          marginLeft: 10,
+          color: '#d1001c',
+        }}>
+        Red Drop
+      </Text>
     </View>
   );
 };
@@ -95,7 +100,8 @@ const HomeStackScreen = () => {
         name="A+"
         component={AposBlood}
         options={({navigation}) => ({
-          title: 'A+ Blood Search',
+          headerTitleStyle: {alignSelf: 'center', marginLeft: -50},
+          title: 'A+ Blood Donors',
         })}
       />
       <HomeStack.Screen
@@ -126,49 +132,56 @@ const HomeStackScreen = () => {
         name="O+"
         component={OposBlood}
         options={({navigation}) => ({
-          title: 'O+ Blood Search',
+          headerTitleStyle: {alignSelf: 'center', marginLeft: -50},
+          title: 'O+ Blood Donors',
         })}
       />
       <HomeStack.Screen
         name="B+"
         component={BposBlood}
         options={({navigation}) => ({
-          title: 'B+ Blood Search',
+          headerTitleStyle: {alignSelf: 'center', marginLeft: -50},
+          title: 'B+ Blood Donors',
         })}
       />
       <HomeStack.Screen
         name="AB+"
         component={ABposBlood}
         options={({navigation}) => ({
-          title: 'AB+ Blood Search',
+          headerTitleStyle: {alignSelf: 'center', marginLeft: -50},
+          title: 'AB+ Blood Donors',
         })}
       />
       <HomeStack.Screen
         name="A-"
         component={AnegBlood}
         options={({navigation}) => ({
-          title: 'A- Blood Search',
+          headerTitleStyle: {alignSelf: 'center', marginLeft: -50},
+          title: 'A- Blood Donors',
         })}
       />
       <HomeStack.Screen
         name="O-"
         component={OnegBlood}
         options={({navigation}) => ({
-          title: 'O- Blood Search',
+          headerTitleStyle: {alignSelf: 'center', marginLeft: -50},
+          title: '0- Blood Donors',
         })}
       />
       <HomeStack.Screen
         name="B-"
         component={BnegBlood}
         options={({navigation}) => ({
-          title: 'B- Blood Search',
+          headerTitleStyle: {alignSelf: 'center', marginLeft: -50},
+          title: 'B- Blood Donors',
         })}
       />
       <HomeStack.Screen
         name="AB-"
         component={ABnegBlood}
         options={({navigation}) => ({
-          title: 'AB- Blood Search',
+          headerTitleStyle: {alignSelf: 'center', marginLeft: -50},
+          title: 'AB- Blood Donors',
         })}
       />
       <HomeStack.Screen
@@ -228,6 +241,14 @@ const ProfileStackScreen = () => {
       <ProfileStack.Screen
         name="UserProfile"
         component={UserProfile}
+        options={({navigation}) => ({
+          title: '',
+          headerShown: false,
+        })}
+      />
+      <ProfileStack.Screen
+        name="Donor Edit"
+        component={DonorDetailsEdit}
         options={({navigation}) => ({
           title: '',
           headerShown: false,

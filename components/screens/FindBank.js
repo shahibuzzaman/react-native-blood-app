@@ -72,7 +72,9 @@ const ABposBlood = ({navigation}) => {
   console.log('donorList', donor);
 
   return (
-    <KeyboardAwareScrollView style={{flex: 1, backgroundColor: 'white'}}>
+    <ScrollView
+      nestedScrollEnabled={true}
+      style={{flex: 1, backgroundColor: 'white'}}>
       <View>
         <View style={{flex: 1, flexDirection: 'column', padding: 20}}>
           <View style={{flex: 1}}>
@@ -307,7 +309,7 @@ const ABposBlood = ({navigation}) => {
           null}
         </View> */}
       </View>
-    </KeyboardAwareScrollView>
+    </ScrollView>
   );
 };
 
