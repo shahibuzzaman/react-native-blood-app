@@ -11,41 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 const {width, height} = Dimensions.get('window');
-
-const categories = [
-  {
-    id: 1,
-    title: 'Dhaka Blood Bank',
-  },
-  {
-    id: 2,
-    title: 'Uttara Blood Bank',
-  },
-  {
-    id: 3,
-    title: 'Rangpur Blood Bank',
-  },
-  {
-    id: 4,
-    title: 'Bogra Blood bank',
-  },
-  {
-    id: 5,
-    title: 'Rajshahi Blood Bank',
-  },
-  {
-    id: 6,
-    title: 'Shylet Blood  bank',
-  },
-  {
-    id: 7,
-    title: 'Barishal Blood Bank',
-  },
-  {
-    id: 8,
-    title: 'Chottogram Blood Bank',
-  },
-];
+import Feather from 'react-native-vector-icons/Feather';
 
 const BloodBanks = ({navigation, route}) => {
   const {searchZone} = route.params;
@@ -86,7 +52,7 @@ const BloodBanks = ({navigation, route}) => {
           <FlatList
             data={donor}
             showsVerticalScrollIndicator={false}
-            numColumns={2}
+            numColumns={1}
             keyExtractor={(item) => String(item.id)}
             renderItem={({item}) => (
               <View
@@ -108,12 +74,26 @@ const BloodBanks = ({navigation, route}) => {
                       banks: item,
                     });
                   }}>
-                  <Text style={styles.text} numberOfLines={2}>
-                    {item.bankname}
-                  </Text>
-                  <Text style={styles.text} numberOfLines={2}>
-                    Address
-                  </Text>
+                  <View style={{flex: 1, justifyContent: 'flex-end'}}>
+                    <Text
+                      style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}
+                      numberOfLines={2}>
+                      {item.bankname}
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Feather name="map-pin" color="white" size={16} />
+                    <Text style={styles.text} numberOfLines={2}>
+                      {item.address}
+                    </Text>
+                  </View>
                 </TouchableOpacity>
               </View>
             )}
@@ -143,8 +123,8 @@ const styles = StyleSheet.create({
   },
   item: {
     flex: 1,
-    height: width / 2 - 20,
-    width: width / 2 - 20,
+    height: width / 4 - 20,
+    width: width - 20,
     backgroundColor: '#d1001c',
     borderColor: '#d1001c',
     justifyContent: 'center',
@@ -154,6 +134,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 14,
+    marginLeft: 5,
   },
 });

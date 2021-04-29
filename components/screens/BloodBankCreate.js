@@ -11,11 +11,16 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Alert,
+  Modal,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
+import Entypo from 'react-native-vector-icons/Entypo';
+import ModalPicker from '../utils/ModalPicker';
+import ModalThanaPicker from '../utils/ModalThanaPicker';
+
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {zoneData} from '../assets/data';
@@ -48,6 +53,8 @@ const BloodBank = ({navigation}) => {
   const [searchDistrict, setSearchDistrict] = useState('');
   const [displayZone, setDisplayZone] = useState(false);
   const [searchZone, setSearchZone] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isThanaModalVisible, setIsThanaModalVisible] = useState(false);
 
   const genderOption = [
     {
@@ -231,6 +238,24 @@ const BloodBank = ({navigation}) => {
   const updatePoke = (poke) => {
     setSearchZone(poke);
     setDisplayZone(false);
+  };
+
+  const setDistrictData = (item) => {
+    setSearchDistrict(item.name);
+    console.log('cat-id', item.id);
+  };
+
+  const setThanaData = (item) => {
+    setSearchZone(item.name);
+    console.log('cat-id', item.id);
+  };
+
+  const changeModalVisibility = (bool) => {
+    setIsModalVisible(bool);
+  };
+
+  const changeThanaModalVisibility = (bool) => {
+    setIsThanaModalVisible(bool);
   };
 
   const address = `${searchZone}, ${searchDistrict}`;
@@ -455,80 +480,55 @@ const BloodBank = ({navigation}) => {
             <View style={{flex: 1, flexDirection: 'column'}}>
               <View style={{flex: 1}}>
                 <Text style={styles.text_footer}>District</Text>
-                <View style={styles.action}>
+                <TouchableOpacity
+                  onPress={() => changeModalVisibility(true)}
+                  style={styles.action}>
                   <Feather name="map-pin" color="#05375a" size={20} />
                   <TextInput
                     placeholder="Your District"
                     style={styles.textInput}
                     autoCapitalize="none"
-                    onFocus={() => setDisplayDistrict(!displayDistrict)}
+                    editable={false}
+                    selectTextOnFocus={false}
                     value={searchDistrict}
                     onChangeText={(value) => setSearchDistrict(value)}
                   />
-                  <Feather name="chevron-down" color="#05375a" size={20} />
-                </View>
-              </View>
-              <View style={{flex: 1}}>
-                {displayDistrict && (
-                  <ScrollView nestedScrollEnabled={true} style={{height: 200}}>
-                    {districtList
-                      .filter(
-                        ({name}) =>
-                          name
-                            .toLowerCase()
-                            .indexOf(searchDistrict.toLowerCase()) > -1,
-                      )
-                      .map((value, i) => {
-                        return (
-                          <TouchableOpacity
-                            onPress={() => updatePokeDex(value.name)}
-                            key={i}
-                            tabIndex="0">
-                            <Text>{value.name}</Text>
-                          </TouchableOpacity>
-                        );
-                      })}
-                  </ScrollView>
-                )}
+                  <Entypo name="popup" color="#05375a" size={20} />
+                </TouchableOpacity>
               </View>
             </View>
             <View style={{flex: 1, flexDirection: 'column', marginLeft: 20}}>
               <View style={{flex: 1}}>
                 <Text style={styles.text_footer}>Thana</Text>
-                <View style={styles.action}>
+                <TouchableOpacity
+                  style={styles.action}
+                  onPress={() => {
+                    searchDistrict
+                      ? changeThanaModalVisibility(true)
+                      : Alert.alert('Alert!', 'Select District First.', [
+                          {
+                            text: 'Cancel',
+                            onPress: () => console.log('Cancel Pressed'),
+                            style: 'cancel',
+                          },
+                          {
+                            text: 'OK',
+                            onPress: () => console.log('OK Pressed'),
+                          },
+                        ]);
+                  }}>
                   <Feather name="map-pin" color="#05375a" size={20} />
                   <TextInput
                     placeholder="Your Thana"
                     style={styles.textInput}
                     autoCapitalize="none"
-                    onFocus={() => setDisplayZone(!displayZone)}
+                    editable={false}
+                    selectTextOnFocus={false}
                     value={searchZone}
                     onChangeText={(value) => setSearchZone(value)}
                   />
-                  <Feather name="chevron-down" color="#05375a" size={20} />
-                </View>
-              </View>
-              <View style={{flex: 1}}>
-                {displayZone && (
-                  <ScrollView nestedScrollEnabled={true} style={{height: 200}}>
-                    {item
-                      .filter(
-                        ({name}) =>
-                          name.toLowerCase().indexOf(searchZone.toLowerCase()) >
-                          -1,
-                      )
-                      .map((value, i) => {
-                        return (
-                          <TouchableOpacity
-                            onPress={() => updatePoke(value.name)}
-                            key={i}
-                            tabIndex="0">
-                            <Text>{value.name}</Text>
-                          </TouchableOpacity>
-                        );
-                      })}
-                  </ScrollView>
-                )}
+                  <Entypo name="popup" color="#05375a" size={20} />
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -671,6 +671,28 @@ const BloodBank = ({navigation}) => {
             </TouchableOpacity>
           </View>
         </View>
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={isModalVisible}
+          nRequestClose={() => changeModalVisibility(false)}>
+          <ModalPicker
+            changeModalVisibility={changeModalVisibility}
+            setData={setDistrictData}
+            categories={districtList}
+          />
+        </Modal>
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={isThanaModalVisible}
+          nRequestClose={() => changeThanaModalVisibility(false)}>
+          <ModalThanaPicker
+            changeModalVisibility={changeThanaModalVisibility}
+            setData={setThanaData}
+            categories={item}
+          />
+        </Modal>
       </ScrollView>
     </KeyboardAwareScrollView>
   );

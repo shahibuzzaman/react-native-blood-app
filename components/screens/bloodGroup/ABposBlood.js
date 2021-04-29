@@ -93,7 +93,7 @@ const AposBlood = ({navigation, route}) => {
     );
   } else {
     return (
-      <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+      <SafeAreaView style={{flex: 1}}>
         <View style={{flex: 1, marginTop: 20}}>
           <View
             style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
@@ -104,6 +104,7 @@ const AposBlood = ({navigation, route}) => {
                 <View
                   style={{
                     flex: 2,
+                    backgroundColor: 'white',
                     flexDirection: 'row',
                     width: width - 20,
                     height: width / 3.5,

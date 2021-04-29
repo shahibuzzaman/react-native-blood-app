@@ -11,12 +11,18 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Alert,
+  Modal,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
+import Entypo from 'react-native-vector-icons/Entypo';
+import ModalPicker from '../utils/ModalPicker';
+import ModalThanaPicker from '../utils/ModalThanaPicker';
+import BankModalPicker from '../utils/BankModalPicker';
 import {RadioButton} from 'react-native-paper';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {zoneData} from '../assets/data';
@@ -51,6 +57,13 @@ const SignUp = ({navigation}) => {
   const [displayBanks, setDisplayBanks] = useState(false);
   const [searchBanks, setSearchBanks] = useState('');
   const [getBank, setBank] = useState([]);
+  const [getBirthDate, setBirthDate] = useState('Enter Date');
+  const [getDonationDate, setDonationDate] = useState('Enter Donation Date');
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isDonateDatePickerVisible, setDonateDatePickerVisibility] = useState(
+    false,
+  );
+  const [bankId, setBankId] = useState('');
 
   const genderOption = [
     {
@@ -125,10 +138,6 @@ const SignUp = ({navigation}) => {
         setBank(json);
       });
   }, []);
-
-  const bankList = getBank.filter((item) => item.zone === `${searchZone}`);
-
-  const bankId = getBank.filter((item) => item.bankname == `${searchBanks}`);
 
   console.log('banklist', bankList);
 
@@ -257,11 +266,93 @@ const SignUp = ({navigation}) => {
     setDisplayBanks(false);
   };
 
-  console.log('bankId', bankId);
+  const showDOBDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
 
-  const getBankId = bankId.map((value) => value.id);
+  const hideDOBDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
 
-  console.log(getBankId[0]);
+  const showDonateDatePicker = () => {
+    setDonateDatePickerVisibility(true);
+  };
+
+  const hideDonateDatePicker = () => {
+    setDonateDatePickerVisibility(false);
+  };
+
+  const [dob, setDob] = useState('');
+
+  const handleDOBConfirm = (date) => {
+    setDob(date);
+    var endDate = new Date(date).toISOString().split('T')[0];
+    setBirthDate(endDate);
+    console.log(endDate);
+    hideDOBDatePicker();
+  };
+
+  const handleDonateDateConfirm = (date) => {
+    var endDate = new Date(date).toISOString().split('T')[0];
+    setDonationDate(endDate);
+    console.log('donation', endDate);
+    hideDonateDatePicker();
+  };
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isBankModalVisible, setIsBankModalVisible] = useState(false);
+  const [isThanaModalVisible, setIsThanaModalVisible] = useState(false);
+
+  const setDistrictData = (item) => {
+    setSearchDistrict(item.name);
+    console.log('cat-id', item.id);
+  };
+
+  const setThanaData = (item) => {
+    setSearchZone(item.name);
+    console.log('cat-id', item.id);
+  };
+
+  const setBankData = (item) => {
+    setSearchBanks(item.bankname);
+    console.log('cat-id', item.id);
+    setBankId(item.id);
+  };
+
+  const changeModalVisibility = (bool) => {
+    setIsModalVisible(bool);
+  };
+  const changeBankModalVisibility = (bool) => {
+    setIsBankModalVisible(bool);
+  };
+
+  const changeThanaModalVisibility = (bool) => {
+    setIsThanaModalVisible(bool);
+  };
+
+  const bankList = getBank.filter((item) => item.zone === `${searchZone}`);
+
+  const [donorAge, setDonorAge] = useState('');
+
+  const getAge = (dob) => {
+    var today = new Date();
+
+    console.log(dob);
+    var birthDate = new Date(dob);
+    console.log('b-date', birthDate);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    setDonorAge(age);
+  };
+
+  useEffect(() => {
+    getAge(dob);
+  }, [dob]);
+
+  console.log('post data', getDonationDate, getBirthDate);
 
   return (
     <KeyboardAwareScrollView>
@@ -399,24 +490,46 @@ const SignUp = ({navigation}) => {
           <View style={{margin: 10}}></View>
           <View style={{flex: 1, flexDirection: 'row'}}>
             <View style={{flex: 1}}>
-              <Text style={styles.text_footer}> Age</Text>
-              <View style={styles.action}>
-                <Feather name="lock" color="#05375a" size={20} />
-                <TextInput
+              <Text style={styles.text_footer}> Date of Birth</Text>
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row',
+                  marginTop: 10,
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#f2f2f2',
+                  paddingBottom: 5,
+                  height: 35,
+                }}
+                onPress={showDOBDatePicker}>
+                <Feather name="calendar" color="#05375a" size={20} />
+                <Text style={{marginLeft: 10}}>{getBirthDate}</Text>
+                {/* <TextInput
                   placeholder="Age"
                   style={styles.textInput}
                   autoCapitalize="none"
                   onChangeText={(value) => ageInputChange(value)}
-                />
-              </View>
+                /> */}
+              </TouchableOpacity>
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                locale="bn_BD"
+                onConfirm={handleDOBConfirm}
+                onCancel={hideDOBDatePicker}
+              />
             </View>
             <View
               style={{
-                flex: 3,
+                flex: 1,
                 marginLeft: 20,
               }}>
               <Text style={styles.text_footer}> Gender</Text>
-              <View style={[styles.action]}>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  marginLeft: 30,
+                  marginTop: 10,
+                }}>
                 {genderOption.map((res) => {
                   return (
                     <View
@@ -424,9 +537,8 @@ const SignUp = ({navigation}) => {
                       style={{
                         alignItems: 'center',
                         flexDirection: 'row',
-                        justifyContent: 'center',
                         flex: 1,
-                        marginBottom: 14,
+                        marginBottom: 5,
                       }}>
                       <TouchableOpacity
                         style={{
@@ -483,80 +595,55 @@ const SignUp = ({navigation}) => {
             <View style={{flex: 1, flexDirection: 'column'}}>
               <View style={{flex: 1}}>
                 <Text style={styles.text_footer}>District</Text>
-                <View style={styles.action}>
+                <TouchableOpacity
+                  onPress={() => changeModalVisibility(true)}
+                  style={styles.action}>
                   <Feather name="map-pin" color="#05375a" size={20} />
                   <TextInput
                     placeholder="Your District"
                     style={styles.textInput}
                     autoCapitalize="none"
-                    onFocus={() => setDisplayDistrict(!displayDistrict)}
+                    editable={false}
+                    selectTextOnFocus={false}
                     value={searchDistrict}
                     onChangeText={(value) => setSearchDistrict(value)}
                   />
-                  <Feather name="chevron-down" color="#05375a" size={20} />
-                </View>
-              </View>
-              <View style={{flex: 1}}>
-                {displayDistrict && (
-                  <ScrollView nestedScrollEnabled={true} style={{height: 200}}>
-                    {districtList
-                      .filter(
-                        ({name}) =>
-                          name
-                            .toLowerCase()
-                            .indexOf(searchDistrict.toLowerCase()) > -1,
-                      )
-                      .map((value, i) => {
-                        return (
-                          <TouchableOpacity
-                            onPress={() => updatePokeDex(value.name)}
-                            key={i}
-                            tabIndex="0">
-                            <Text>{value.name}</Text>
-                          </TouchableOpacity>
-                        );
-                      })}
-                  </ScrollView>
-                )}
+                  <Entypo name="popup" color="#05375a" size={20} />
+                </TouchableOpacity>
               </View>
             </View>
             <View style={{flex: 1, flexDirection: 'column', marginLeft: 20}}>
               <View style={{flex: 1}}>
                 <Text style={styles.text_footer}>Thana</Text>
-                <View style={styles.action}>
+                <TouchableOpacity
+                  style={styles.action}
+                  onPress={() => {
+                    searchDistrict
+                      ? changeThanaModalVisibility(true)
+                      : Alert.alert('Alert!', 'Select District First.', [
+                          {
+                            text: 'Cancel',
+                            onPress: () => console.log('Cancel Pressed'),
+                            style: 'cancel',
+                          },
+                          {
+                            text: 'OK',
+                            onPress: () => console.log('OK Pressed'),
+                          },
+                        ]);
+                  }}>
                   <Feather name="map-pin" color="#05375a" size={20} />
                   <TextInput
                     placeholder="Your Thana"
                     style={styles.textInput}
                     autoCapitalize="none"
-                    onFocus={() => setDisplayZone(!displayZone)}
+                    editable={false}
+                    selectTextOnFocus={false}
                     value={searchZone}
                     onChangeText={(value) => setSearchZone(value)}
                   />
-                  <Feather name="chevron-down" color="#05375a" size={20} />
-                </View>
-              </View>
-              <View style={{flex: 1}}>
-                {displayZone && (
-                  <ScrollView nestedScrollEnabled={true} style={{height: 200}}>
-                    {item
-                      .filter(
-                        ({name}) =>
-                          name.toLowerCase().indexOf(searchZone.toLowerCase()) >
-                          -1,
-                      )
-                      .map((value, i) => {
-                        return (
-                          <TouchableOpacity
-                            onPress={() => updatePoke(value.name)}
-                            key={i}
-                            tabIndex="0">
-                            <Text>{value.name}</Text>
-                          </TouchableOpacity>
-                        );
-                      })}
-                  </ScrollView>
-                )}
+                  <Entypo name="popup" color="#05375a" size={20} />
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -628,42 +715,65 @@ const SignUp = ({navigation}) => {
           </View>
           <View style={{margin: 10}}></View>
           <View style={{flex: 1}}>
+            <Text style={styles.text_footer}> Last Date of Blood Donation</Text>
+            <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                marginTop: 10,
+                borderBottomWidth: 1,
+                borderBottomColor: '#f2f2f2',
+                paddingBottom: 5,
+                height: 35,
+              }}
+              onPress={showDonateDatePicker}>
+              <Feather name="calendar" color="#05375a" size={20} />
+              <Text style={{marginLeft: 10}}>{getDonationDate}</Text>
+              {/* <TextInput
+                  placeholder="Age"
+                  style={styles.textInput}
+                  autoCapitalize="none"
+                  onChangeText={(value) => ageInputChange(value)}
+                /> */}
+            </TouchableOpacity>
+            <DateTimePickerModal
+              isVisible={isDonateDatePickerVisible}
+              mode="date"
+              locale="bn_BD"
+              onConfirm={handleDonateDateConfirm}
+              onCancel={hideDonateDatePicker}
+            />
+          </View>
+          <View style={{margin: 10}}></View>
+          <View style={{flex: 1}}>
             <Text style={styles.text_footer}>Blood Bank</Text>
-            <View style={styles.action}>
+            <TouchableOpacity
+              style={styles.action}
+              onPress={() => {
+                searchZone
+                  ? changeBankModalVisibility(true)
+                  : Alert.alert('Alert!', 'Select District & Thana First.', [
+                      {
+                        text: 'Cancel',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'OK',
+                        onPress: () => console.log('OK Pressed'),
+                      },
+                    ]);
+              }}>
               <Feather name="briefcase" color="#05375a" size={20} />
               <TextInput
                 placeholder="Select Your Bank"
                 style={styles.textInput}
-                autoCapitalize="none"
-                onFocus={() => setDisplayBanks(!displayBanks)}
+                editable={false}
+                selectTextOnFocus={false}
                 value={searchBanks}
                 onChangeText={(value) => setSearchBanks(value)}
               />
-              <Feather name="chevron-down" color="#05375a" size={20} />
-            </View>
-          </View>
-          <View style={{flex: 1}}>
-            {displayBanks && (
-              <ScrollView nestedScrollEnabled={true} style={{height: 200}}>
-                {bankList
-                  .filter(
-                    ({bankname}) =>
-                      bankname
-                        .toLowerCase()
-                        .indexOf(searchBanks.toLowerCase()) > -1,
-                  )
-                  .map((value, i) => {
-                    return (
-                      <TouchableOpacity
-                        onPress={() => updateBank(value.bankname)}
-                        key={i}
-                        tabIndex="0">
-                        <Text>{value.bankname}</Text>
-                      </TouchableOpacity>
-                    );
-                  })}
-              </ScrollView>
-            )}
+              <Entypo name="popup" color="#05375a" size={20} />
+            </TouchableOpacity>
           </View>
           <View style={styles.button}>
             <TouchableOpacity
@@ -676,7 +786,7 @@ const SignUp = ({navigation}) => {
                     Accept: 'application/json',
                   },
                   body: JSON.stringify({
-                    banks_id: getBankId[0],
+                    banks_id: bankId,
                     name: data.name,
                     password: data.password,
                     district: searchDistrict,
@@ -686,10 +796,13 @@ const SignUp = ({navigation}) => {
                     email: data.email,
                     address: `${searchZone}, ${searchDistrict}`,
                     blood: blood,
-                    age: data.age,
+                    age: donorAge,
+                    date: getDonationDate,
+                    dob: getBirthDate,
                   }),
                 }).then((response) => {
                   const getStatus = response.status;
+                  console.log('res', response.data);
 
                   if (getStatus === 200) {
                     console.log(response.status);
@@ -802,6 +915,39 @@ const SignUp = ({navigation}) => {
             </TouchableOpacity>
           </View>
         </View>
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={isModalVisible}
+          nRequestClose={() => changeModalVisibility(false)}>
+          <ModalPicker
+            changeModalVisibility={changeModalVisibility}
+            setData={setDistrictData}
+            categories={districtList}
+          />
+        </Modal>
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={isThanaModalVisible}
+          nRequestClose={() => changeThanaModalVisibility(false)}>
+          <ModalThanaPicker
+            changeModalVisibility={changeThanaModalVisibility}
+            setData={setThanaData}
+            categories={item}
+          />
+        </Modal>
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={isBankModalVisible}
+          nRequestClose={() => changeBankVisibility(false)}>
+          <BankModalPicker
+            changeModalVisibility={changeBankModalVisibility}
+            setData={setBankData}
+            categories={bankList}
+          />
+        </Modal>
       </ScrollView>
     </KeyboardAwareScrollView>
   );

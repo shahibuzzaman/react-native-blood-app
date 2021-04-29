@@ -92,11 +92,9 @@ const DonorDetails = ({navigation, user, logout}) => {
             </Text> */}
             <Text style={{marginTop: 10, fontSize: 16}}>
               <Text style={{fontWeight: 'bold', margin: 10}}>
-                Last date of blood donation:{' '}
+                Last date of blood donation:
+                {getDonorDetails.Donar.Details[0].date}
               </Text>
-              {getDonorDetails.Donar.Details[0].date
-                ? getDonorDetails.Donar.Details[0].date
-                : 'Not set yet!'}
             </Text>
           </View>
           <View
